@@ -11,10 +11,21 @@
 using namespace cv;
 using namespace std;
 
+int N = 10;
+ColorCluster Cl[10];
+
 void my_segmentation(Mat& frame, Mat & result)
 {
 	unsigned char* ptr_in  = frame.ptr();
 	unsigned char* ptr_out = result.ptr();
+
+	for (int k = 0; k < N; k++)
+	{
+		Cl[k].mB = 0;
+		Cl[k].mG = 0;
+		Cl[k].mR = 0;
+		Cl[k].t = 0;
+	}
 
 	for (int j = 0; j < frame.rows; j++)
 	{
@@ -24,17 +35,28 @@ void my_segmentation(Mat& frame, Mat & result)
 			unsigned char G = ptr_in[j * frame.cols * 3 + i * 3 + 1];
 			unsigned char R = ptr_in[j * frame.cols * 3 + i * 3 + 2];
 
-			ptr_out[j * frame.cols * 3 + i*3    ] = B;
-			ptr_out[j * frame.cols * 3 + i*3 + 1] = 0;
-			ptr_out[j * frame.cols * 3 + i*3 + 2] = 0;
+			int I = (B + G + R) / 3;
+
+			ptr_out[j * frame.cols * 3 + i*3    ] = I;
+			ptr_out[j * frame.cols * 3 + i*3 + 1] = I;
+			ptr_out[j * frame.cols * 3 + i*3 + 2] = I;
 		}
+	}
+
+	// calcular promedios
+	for (int k = 0; k < N; k++)
+	{
+		Cl[k].mB = Cl[k].B / Cl[k].t;
+		Cl[k].mG = Cl[k].G / Cl[k].t;
+		Cl[k].mR = Cl[k].R / Cl[k].t;
+		Cl[k].t = 0;
 	}
 }
 
 int process(VideoCapture& capture) {
 
 	string window_name_1 = "Salida";
-	string window_name_2 = "Filtro";
+	string window_name_2 = "Camara";
 
 	namedWindow(window_name_1, WINDOW_KEEPRATIO);
 	namedWindow(window_name_2, WINDOW_KEEPRATIO);
