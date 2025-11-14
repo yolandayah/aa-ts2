@@ -96,8 +96,8 @@ void my_segmentation(Mat& frame, Mat & result)
 				Cl[sel].mR += R;
 				Cl[sel].t++;
 
-				if ( (Cl[sel].G > Cl[sel].R)
-				  && (Cl[sel].G > Cl[sel].B) )
+				if ( (Cl[sel].R > Cl[sel].G)
+				  && (Cl[sel].R > Cl[sel].B) )
 				{
 					ptr_out[pos]     = Cl[sel].B;
 					ptr_out[pos + 1] = Cl[sel].G;
