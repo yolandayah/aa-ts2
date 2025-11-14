@@ -64,9 +64,12 @@ void my_segmentation(Mat& frame, Mat & result)
 	{
 		for (int i = 0; i < frame.cols; i++)
 		{
-			unsigned char B = ptr_in[j * frame.cols * 3 + i * 3];
-			unsigned char G = ptr_in[j * frame.cols * 3 + i * 3 + 1];
-			unsigned char R = ptr_in[j * frame.cols * 3 + i * 3 + 2];
+
+			int pos = j * frame.cols * 3 + i * 3;
+
+			unsigned char B = ptr_in[pos];
+			unsigned char G = ptr_in[pos + 1];
+			unsigned char R = ptr_in[pos + 2];
 
 			float Min = 25000;
 			int sel = -1;
@@ -93,9 +96,17 @@ void my_segmentation(Mat& frame, Mat & result)
 				Cl[sel].mR += R;
 				Cl[sel].t++;
 
-				ptr_out[j * frame.cols * 3 + i*3    ] = Cl[sel].B;
-				ptr_out[j * frame.cols * 3 + i*3 + 1] = Cl[sel].G;
-				ptr_out[j * frame.cols * 3 + i*3 + 2] = Cl[sel].R;
+				if ( (Cl[sel].G > Cl[sel].R)
+				  && (Cl[sel].G > Cl[sel].B) )
+				{
+					ptr_out[pos]     = Cl[sel].B;
+					ptr_out[pos + 1] = Cl[sel].G;
+					ptr_out[pos + 2] = Cl[sel].R;
+				} else {
+					ptr_out[pos]     = 0;
+					ptr_out[pos + 1] = 0;
+					ptr_out[pos + 2] = 0;
+				}
 			}
 		}
 	}
