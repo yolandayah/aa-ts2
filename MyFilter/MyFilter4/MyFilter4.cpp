@@ -35,7 +35,7 @@ int N = 10;
 ColorCluster Cl[10];
 
 int Nred = 1;
-ColorCluster RedCl[1];
+RedCluster RedCl[1];
 
 Mat BackG;
 bool removeBG = false;
@@ -55,9 +55,9 @@ void my_segmentation(Mat& frame, Mat & result)
 
 	for (int k = 0; k < Nred; k++)
 	{
-		Cl[k].mx = 0;
-		Cl[k].my = 0;
-		Cl[k].t = 0;
+		RedCl[k].mx = 0;
+		RedCl[k].my = 0;
+		RedCl[k].t = 0;
 	}
 
 	for (int j = 0; j < frame.rows; j++)
@@ -98,9 +98,9 @@ int process(VideoCapture& capture) {
 
 	for (int k = 0; k < Nred; k++)
 	{
-		Cl[k].x = ((float)639 * rand())/RAND_MAX;
-		Cl[k].y = ((float)479 * rand())/RAND_MAX;
-		Cl[k].t = 0;
+		RedCl[k].x = ((float)639 * rand())/RAND_MAX;
+		RedCl[k].y = ((float)479 * rand())/RAND_MAX;
+		RedCl[k].t = 0;
 	}
 
 	string window_name_1 = "Salida";
