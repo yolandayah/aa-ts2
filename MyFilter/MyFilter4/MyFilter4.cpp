@@ -16,21 +16,28 @@ void my_segmentation(Mat& frame, Mat & result)
 	unsigned char* ptr_in  = frame.ptr();
 	unsigned char* ptr_out = result.ptr();
 
-	for (int j = 0; j < 100; j++)
+	for (int j = 0; j < frame.rows; j++)
 	{
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < frame.cols; i++)
 		{
-			//unsigned char R = ptr_in[j +i];
-			ptr_out[j + i] = 0;
+			unsigned char B = ptr_in[j * frame.cols * 3 + i * 3];
+			unsigned char G = ptr_in[j * frame.cols * 3 + i * 3 + 1];
+			unsigned char R = ptr_in[j * frame.cols * 3 + i * 3 + 2];
+
+			ptr_out[j * frame.cols * 3 + i*3    ] = B;
+			ptr_out[j * frame.cols * 3 + i*3 + 1] = 0;
+			ptr_out[j * frame.cols * 3 + i*3 + 2] = 0;
 		}
 	}
 }
 
 int process(VideoCapture& capture) {
 
-	string window_name = "Captura de Video";
+	string window_name_1 = "Salida";
+	string window_name_2 = "Filtro";
 
-	namedWindow(window_name, WINDOW_KEEPRATIO);
+	namedWindow(window_name_1, WINDOW_KEEPRATIO);
+	namedWindow(window_name_2, WINDOW_KEEPRATIO);
 
 	Mat frame, result;
 
@@ -43,7 +50,12 @@ int process(VideoCapture& capture) {
 			break;
 		}
 
-		imshow(window_name, frame);
+		result = frame.clone();
+
+		my_segmentation(frame, result);
+
+		imshow(window_name_1, frame);
+		imshow(window_name_2, result);
 
 		char key = (char)waitKey(30); // Espera 30 milisegundos
 
