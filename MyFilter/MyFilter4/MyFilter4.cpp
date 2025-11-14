@@ -68,11 +68,30 @@ void my_segmentation(Mat& frame, Mat & result)
 			unsigned char G = ptr_in[j * frame.cols * 3 + i * 3 + 1];
 			unsigned char R = ptr_in[j * frame.cols * 3 + i * 3 + 2];
 
-			int I = (B + G + R) / 3;
+			float Min = 2500;
+			int sel = -1;
 
-			ptr_out[j * frame.cols * 3 + i*3    ] = I;
-			ptr_out[j * frame.cols * 3 + i*3 + 1] = I;
-			ptr_out[j * frame.cols * 3 + i*3 + 2] = I;
+			for (int k = 0; k < N; k++)
+			{
+				// Calcula la distancia entre un pixel
+				// y el cluster k
+				float d = sqrt((B-Cl[k].B) * (B-Cl[k].B)
+					+ (G-Cl[k].G) * (G-Cl[k].G)
+					+ (R-Cl[k].R) * (R-Cl[k].R));
+
+				// ver si es la más pequeña
+				if (d < Min)
+				{
+					Min = d;
+					sel = k;
+				}
+			}
+			if (sel > -1)
+			{
+				ptr_out[j * frame.cols * 3 + i*3    ] = Cl[sel].B;
+				ptr_out[j * frame.cols * 3 + i*3 + 1] = Cl[sel].B;
+				ptr_out[j * frame.cols * 3 + i*3 + 2] = Cl[sel].B;
+			}
 		}
 	}
 
