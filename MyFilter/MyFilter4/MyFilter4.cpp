@@ -1,11 +1,80 @@
-// MyFilter4.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
-//
+//  Yolanda Alejo Huerta
+
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 #include <iostream>
 
+using namespace cv;
+using namespace std;
+
+void my_segmentation(Mat& frame, Mat & result)
+{
+	unsigned char* ptr_in  = frame.ptr();
+	unsigned char* ptr_out = result.ptr();
+
+	for (int j = 0; j < 100; j++)
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			//unsigned char R = ptr_in[j +i];
+			ptr_out[j + i] = 0;
+		}
+	}
+}
+
+int process(VideoCapture& capture) {
+
+	string window_name = "Captura de Video";
+
+	namedWindow(window_name, WINDOW_KEEPRATIO);
+
+	Mat frame, result;
+
+	for (;;) {
+
+		// Captur la imagen
+		capture >> frame;
+
+		if (frame.empty()) {
+			break;
+		}
+
+		imshow(window_name, frame);
+
+		char key = (char)waitKey(30); // Espera 30 milisegundos
+
+		switch (key) {
+			case 'q':
+			case 'Q':
+			case 27:  // Tecla de Esc  (Escape)
+				return 0;
+
+			default:
+				break;
+		}
+	}
+
+	return 0;
+}
+
 int main()
 {
-    std::cout << "Hello World!\n";
+	VideoCapture capture;
+	capture.open(0);
+
+	if (!capture.isOpened())
+	{
+		cerr << "*** Error a la hora de abrir la camara ***" << endl;
+		return 1;
+	}
+
+	process(capture);
+
+	return 0;
 }
 
 // Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
