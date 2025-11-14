@@ -53,6 +53,13 @@ void my_segmentation(Mat& frame, Mat & result)
 		Cl[k].t = 0;
 	}
 
+	for (int k = 0; k < Nred; k++)
+	{
+		Cl[k].mx = 0;
+		Cl[k].my = 0;
+		Cl[k].t = 0;
+	}
+
 	for (int j = 0; j < frame.rows; j++)
 	{
 		for (int i = 0; i < frame.cols; i++)
@@ -80,6 +87,21 @@ void my_segmentation(Mat& frame, Mat & result)
 }
 
 int process(VideoCapture& capture) {
+
+	for (int k = 0; k < N; k++)
+	{
+		Cl[k].B = ((float)255 * rand())/RAND_MAX;
+		Cl[k].G = ((float)255 * rand())/RAND_MAX;
+		Cl[k].R = ((float)255 * rand())/RAND_MAX;
+		Cl[k].t = 0;
+	}
+
+	for (int k = 0; k < Nred; k++)
+	{
+		Cl[k].x = ((float)639 * rand())/RAND_MAX;
+		Cl[k].y = ((float)479 * rand())/RAND_MAX;
+		Cl[k].t = 0;
+	}
 
 	string window_name_1 = "Salida";
 	string window_name_2 = "Camara";
