@@ -11,6 +11,17 @@
 using namespace cv;
 using namespace std;
 
+struct Colorcluster
+{
+	float R;
+	float G;
+	float B;
+	float mR;
+	float mG;
+	float mB;
+	float t;
+};
+
 int N = 10;
 ColorCluster Cl[10];
 
