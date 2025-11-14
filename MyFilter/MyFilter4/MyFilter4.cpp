@@ -11,7 +11,7 @@
 using namespace cv;
 using namespace std;
 
-struct Colorcluster
+struct ColorCluster
 {
 	float R;
 	float G;
@@ -22,8 +22,23 @@ struct Colorcluster
 	float t;
 };
 
+struct RedCluster
+{
+	float x;
+	float y;
+	float mx;
+	float my;
+	float t;
+};
+
 int N = 10;
 ColorCluster Cl[10];
+
+int Nred = 1;
+ColorCluster RedCl[1];
+
+Mat BackG;
+bool removeBG = false;
 
 void my_segmentation(Mat& frame, Mat & result)
 {
