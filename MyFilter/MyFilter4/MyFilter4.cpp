@@ -68,7 +68,7 @@ void my_segmentation(Mat& frame, Mat & result)
 			unsigned char G = ptr_in[j * frame.cols * 3 + i * 3 + 1];
 			unsigned char R = ptr_in[j * frame.cols * 3 + i * 3 + 2];
 
-			float Min = 2500;
+			float Min = 25000;
 			int sel = -1;
 
 			for (int k = 0; k < N; k++)
@@ -76,8 +76,8 @@ void my_segmentation(Mat& frame, Mat & result)
 				// Calcula la distancia entre un pixel
 				// y el cluster k
 				float d = sqrt((B-Cl[k].B) * (B-Cl[k].B)
-					+ (G-Cl[k].G) * (G-Cl[k].G)
-					+ (R-Cl[k].R) * (R-Cl[k].R));
+					     + (G-Cl[k].G) * (G-Cl[k].G)
+					     + (R-Cl[k].R) * (R-Cl[k].R));
 
 				// ver si es la más pequeña
 				if (d < Min)
@@ -88,9 +88,14 @@ void my_segmentation(Mat& frame, Mat & result)
 			}
 			if (sel > -1)
 			{
+				Cl[sel].mB += B;
+				Cl[sel].mG += G;
+				Cl[sel].mR += R;
+				Cl[sel].t++;
+
 				ptr_out[j * frame.cols * 3 + i*3    ] = Cl[sel].B;
-				ptr_out[j * frame.cols * 3 + i*3 + 1] = Cl[sel].B;
-				ptr_out[j * frame.cols * 3 + i*3 + 2] = Cl[sel].B;
+				ptr_out[j * frame.cols * 3 + i*3 + 1] = Cl[sel].G;
+				ptr_out[j * frame.cols * 3 + i*3 + 2] = Cl[sel].R;
 			}
 		}
 	}
@@ -98,10 +103,11 @@ void my_segmentation(Mat& frame, Mat & result)
 	// calcular promedios
 	for (int k = 0; k < N; k++)
 	{
-		Cl[k].mB = Cl[k].B / Cl[k].t;
-		Cl[k].mG = Cl[k].G / Cl[k].t;
-		Cl[k].mR = Cl[k].R / Cl[k].t;
-		Cl[k].t = 0;
+		if (Cl[k].t > 0) {
+			Cl[k].B = Cl[k].mB / Cl[k].t;
+			Cl[k].G = Cl[k].mG / Cl[k].t;
+			Cl[k].R = Cl[k].mR / Cl[k].t;
+		}
 	}
 }
 
