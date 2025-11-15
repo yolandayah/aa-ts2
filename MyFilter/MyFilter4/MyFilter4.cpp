@@ -104,6 +104,10 @@ void my_segmentation(Mat& frame, Mat & result)
 					ptr_out[pos]     = Cl[sel].B;
 					ptr_out[pos + 1] = Cl[sel].G;
 					ptr_out[pos + 2] = Cl[sel].R;
+
+					ptr_in[pos]     = 0;
+					ptr_in[pos + 1] = 0;
+					ptr_in[pos + 2] = Cl[sel].R;
 				} else {
 					ptr_out[pos]     = 0;
 					ptr_out[pos + 1] = 0;
